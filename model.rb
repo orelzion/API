@@ -15,8 +15,9 @@ class User
 	property :update_at, DateTime
 	property :facebook_token, Text, :lazy => [:fb]
 	property :facebook_token_updated_at, DateTime, :lazy => [:fb]
-	property :apps, Json
 	property :user_key, APIKey, :default => APIKey.generate
+
+	has n, :apps
 end
 
 class Dev
@@ -33,11 +34,16 @@ class Dev
 end
 
 class App
-	attr_accessor :app_name
-	attr_accessor :paid_user
-	attr_accessor :billing_source
-	attr_accessor :purchased_at
-	attr_accessor :access_token
+	include DataMapper::Resource
+
+	property :id, Serial, :key => true
+	property :app_name, String, :unique => true
+	property :paid_user, Boolean
+	property :billing_source, Enum[:google_play, :amazon, :paypal]
+	property :purchased_at, DateTime
+	property :access_token, String
+
+	belongs_to :user
 end
 
 DataMapper.finalize

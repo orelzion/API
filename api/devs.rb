@@ -37,6 +37,20 @@ class Devs <Grape::API
 			end
 		end
 
+		desc 'Create a new dev'
+		post do 
+			authenticate!
+			if(current_dev.access == :read ||
+				current_dev.access == :modify) then
+				error!('You have no rights to create a new dev', 403)
+			end
+			@dev = Dev.new
+			@dev.email = params[:email]
+			@dev.dev_name = params[:dev_name]
+			@dev.access = params[:access]
+			@dev.save
+		end
+
 		desc "Modify dev object using API key"
 		params do
 			requires :key, type: String, desc:"API Key"
@@ -44,7 +58,6 @@ class Devs <Grape::API
 			requires :dev_brand, type: String, desc:"Dev's brand_name"
 		end
 		put ':key', requirements: { email: /.*/ } do
-			logger.info("i'm in put dev")
 			authenticate!
 			if(current_dev.access == :read) then 
 				error!('You have no right to modify', 403) 
