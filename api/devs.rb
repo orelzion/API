@@ -1,14 +1,10 @@
 require 'grape'
 
-class Devs <Grape::API
+class Devs < Grape::API
 	resource :devs do
 
 		desc "Get all devs"
-		params do
-			optional :limit, type: Integer, desc: "Limit result"
-			end
 		get do
-			logger.info("i'm here lol")
 			authenticate!
 			Dev.all
 		end
@@ -19,7 +15,6 @@ class Devs <Grape::API
 	    		requires :email, type: String, desc: "Dev's email"
 	  		end
 				get ':email', requirements: { email: /.*/ } do
-					logger.info "i'm here"
 				authenticate!
 				Dev.all(:email => params[:email])
 			end
@@ -49,6 +44,7 @@ class Devs <Grape::API
 			@dev.dev_name = params[:dev_name]
 			@dev.access = params[:access]
 			@dev.save
+			Dev.all(:oreder => [:updated_at count.desc])
 		end
 
 		desc "Modify dev object using API key"
@@ -81,7 +77,7 @@ class Devs <Grape::API
 				@dev.destroy
 				'success'
 			else
-				'Dev not found'
+				error!('Dev not found', 404)
 			end
 		end
 	end

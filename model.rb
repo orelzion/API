@@ -27,6 +27,8 @@ class Dev
 	property :dev_name, String, :unique => true
 	property :api_key, APIKey, :default => APIKey.generate
 	property :access, Enum[:read, :modify, :create, :all], :default => :read
+	property :created_at, DateTime, :default => DateTime.now
+	property :update_at, DateTime, :default => DateTime.now
 
 	def self.authenticate! (api_key)
 		first(:api_key => api_key)
