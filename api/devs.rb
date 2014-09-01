@@ -44,7 +44,7 @@ class Devs < Grape::API
 			@dev.dev_name = params[:dev_name]
 			@dev.access = params[:access]
 			@dev.save
-			Dev.all(:oreder => [:updated_at.desc])
+			Dev.all(:oreder => [:updated_at.desc])  
 		end
 
 		desc "Modify dev object using API key"
