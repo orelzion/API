@@ -44,6 +44,7 @@ class Devs < Grape::API
 			@dev.dev_name = params[:dev_name]
 			@dev.access = params[:access]
 			@dev.save
+
 			Dev.all(:order => [:updated_at.desc])
 		end
 
