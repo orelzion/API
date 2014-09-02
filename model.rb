@@ -12,7 +12,7 @@ class User
 	property :email, String, :required => true, :lazy => [:auth]
 	property :password, BCryptHash, :required => true, :lazy => [:auth]
 	property :created_at, DateTime, :default => DateTime.now
-	property :update_at, DateTime
+	property :updated_at, DateTime
 	property :facebook_token, Text, :lazy => [:fb]
 	property :facebook_token_updated_at, DateTime, :lazy => [:fb]
 	property :user_key, APIKey, :default => APIKey.generate
@@ -28,7 +28,7 @@ class Dev
 	property :api_key, APIKey, :default => APIKey.generate
 	property :access, Enum[:read, :modify, :create, :all], :default => :read
 	property :created_at, DateTime, :default => DateTime.now
-	property :update_at, DateTime, :default => DateTime.now
+	property :updated_at, DateTime, :default => DateTime.now
 
 	def self.authenticate! (api_key)
 		first(:api_key => api_key)

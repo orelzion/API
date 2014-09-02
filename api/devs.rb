@@ -44,14 +44,12 @@ class Devs < Grape::API
 			@dev.dev_name = params[:dev_name]
 			@dev.access = params[:access]
 			@dev.save
-			Dev.all(:oreder => [:updated_at.desc])
+			Dev.all(:order => [:updated_at.desc])
 		end
 
 		desc "Modify dev object using API key"
 		params do
 			requires :key, type: String, desc:"API Key"
-			requires :email, type: String, desc:"Dev's email"
-			requires :dev_brand, type: String, desc:"Dev's brand_name"
 		end
 		put ':key', requirements: { email: /.*/ } do
 			authenticate!
@@ -59,9 +57,13 @@ class Devs < Grape::API
 				error!('You have no right to modify', 403) 
 			end
 			@dev = Dev.first(:api_key => params[:key])
+			if(!@dev) then
+				error!('Dev key is not found', 404)
+			end
 			@dev.update(:email => params[:email])
 			@dev.update(:dev_name => params[:dev_brand])
-			@dev
+			@dev.update(:updated_at => DateTime.now)
+			Dev.all(:order => [:updated_at.desc])
 		end
 
 		desc "Deletes an entry"
