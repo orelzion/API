@@ -4,6 +4,15 @@ require './api/devs'
 
 module KarriApps
 
+	if(Dev.all.length == 0) then
+		@dev = Dev.new
+		@dev.dev_name = 'Karri Apps'
+		@dev.email = 'orelzion@gmail.com'
+		@dev.access = :all
+		@dev.api_key = '95569127a9facf605688e686b86f4a05002c0dfc'
+		@dev.save
+	end
+
 	class API < Grape::API
 		format :json
 
