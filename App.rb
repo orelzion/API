@@ -15,6 +15,7 @@ module KarriApps
 
 	class API < Grape::API
 		format :json
+		default_error_formatter :txt
 
 		helpers do
 			def logger
@@ -31,5 +32,6 @@ module KarriApps
 
 		mount Users
 		mount Devs
+
 	end
 end

@@ -1,5 +1,3 @@
-require 'grape'
-
 class Devs < Grape::API
 	resource :devs do
 
@@ -10,7 +8,7 @@ class Devs < Grape::API
 			end
 		end
 
-		desc "Get all devs"
+		desc "Get all devs", hidden: true
 		params do 
 			optional :order_by, type: Symbol, values: [:dev_name, :created_at, :updated_at, :email, :id], default: :id
 			optional :sort_by,  type: Symbol, values: [:asc, :desc], default: :asc
@@ -45,11 +43,11 @@ class Devs < Grape::API
 
 		desc 'Create a new dev'
 		post do 
-			@dev = Dev.new
-			@dev.email = params[:email]
-			@dev.dev_name = params[:dev_name]
-			@dev.access = params[:access]
-			@dev.save
+			dev = Dev.new
+			dev.email = params[:email]
+			dev.dev_name = params[:dev_name]
+			dev.access = params[:access]
+			dev.save
 
 			Dev.all(:order => [:updated_at.desc])
 		end
@@ -59,14 +57,14 @@ class Devs < Grape::API
 			requires :key, type: String, desc:"API Key"
 		end
 		put ':key', requirements: { email: /.*/ } do
-			@dev = Dev.first(:api_key => params[:key])
-			if(!@dev) then
+			dev = Dev.first(:api_key => params[:key])
+			if(!dev) then
 				error!('Dev key is not found', 404)
 			end
-			@dev.update(:email => params[:email])
-			@dev.update(:dev_name => params[:dev_name])
-			@dev.update(:access => params[:access])
-			@dev.update(:updated_at => DateTime.now)
+			dev.update(:email => params[:email])
+			dev.update(:dev_name => params[:dev_name])
+			dev.update(:access => params[:access])
+			dev.update(:updated_at => DateTime.now)
 			Dev.all(:order => [:updated_at.desc])
 		end
 
@@ -75,8 +73,8 @@ class Devs < Grape::API
 			requires :key, type: String, desc:"API Key"
 		end
 		delete ':key' do
-			if @dev = Dev.first(:api_key => params[:key]) then
-				@dev.destroy
+			if dev = Dev.first(:api_key => params[:key]) then
+				dev.destroy
 				'success'
 			else
 				error!('Dev not found', 404)
