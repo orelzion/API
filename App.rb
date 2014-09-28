@@ -1,6 +1,7 @@
 require './model'
 require './api/users'
 require './api/devs'
+require './api/maaser'
 
 module KarriApps
 
@@ -32,6 +33,6 @@ module KarriApps
 
 		mount Users
 		mount Devs
-
+		mount Maaser
 	end
 end

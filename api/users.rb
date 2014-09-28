@@ -35,6 +35,14 @@ class Users < Grape::API
 			end
 		end
 
+		params do 
+			requires :id, type: Integer
+		end
+		route_param :id do
+			get do 
+				User.all(:id => params[:id])
+			end
+		end
 		
 		namespace :findByEmail do
 			desc "Find user by email"

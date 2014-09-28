@@ -115,6 +115,35 @@ class Dev
 	end
 end
 
+class MaaserTransaction
+	include DataMapper::Resource
+	include Grape::Entity::DSL
+
+	property :id, Serial, :key => true
+	property :sum, Float, required: true
+	property :description, String
+	property :type, Enum[:income, :outcome]
+	property :date, DateTime, :default => DateTime.now
+	property :updated_at, DateTime, :default => DateTime.now
+	property :user_id, Integer
+
+	entity do 
+		expose :id 
+		expose :user_id
+		expose :sum 
+		expose :description
+		expose :type
+		expose :date 
+		expose :updated_at
+
+		expose :url do |maasertransaction,opts| 
+      		"http://#{opts[:env]['HTTP_HOST']}" + 
+        	"/maaser/#{maasertransaction.id}"
+    	end		
+	end
+end
+
+
 DataMapper.finalize
 DataMapper.auto_upgrade!
 
